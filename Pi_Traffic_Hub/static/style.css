@@ -1,0 +1,284 @@
+:root {
+    --bg-dark: #0a0e17;
+    --panel-bg: rgba(20, 26, 38, 0.7);
+    --border-color: rgba(59, 130, 246, 0.3);
+    --accent-blue: #3b82f6;
+    --danger-red: #ef4444;
+    --warn-yellow: #f59e0b;
+    --safe-green: #10b981;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    padding: 2rem;
+    /* Soft glowing background effect */
+    background-image: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+h1 { font-weight: 300; font-size: 1.8rem; letter-spacing: 2px; }
+h1 span { font-weight: 700; color: var(--accent-blue); }
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.status-badge.connected { background: rgba(16, 185, 129, 0.2); color: var(--safe-green); border: 1px solid var(--safe-green); }
+.status-badge.connecting { background: rgba(245, 158, 11, 0.2); color: var(--warn-yellow); border: 1px solid var(--warn-yellow); }
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+}
+
+.panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.panel-header {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+/* Video Feed */
+.video-panel { grid-column: 1 / 2; grid-row: 1 / 3; }
+.video-container {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+    position: relative;
+    background: #000;
+}
+.video-container img { width: 100%; display: block; }
+.video-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+    background-size: 100% 4px, 3px 100%;
+    pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   Digital Twin – T-Junction Map (Corrected Layout)
+   ═══════════════════════════════════════════════════ */
+.traffic-panel { grid-column: 2 / 3; position: relative; }
+
+.t-junction-map {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+/* ── Road surfaces ── */
+/* Horizontal road: runs full width, centered vertically at 40% from top */
+.road-horizontal {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #1e293b;
+    z-index: 1;
+}
+.road-horizontal::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    border-top: 2px dashed rgba(148, 163, 184, 0.5);
+}
+
+/* Vertical road: runs from horizontal road down to bottom */
+.road-vertical {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 65%;
+    background: #1e293b;
+    z-index: 1;
+}
+.road-vertical::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    border-left: 2px dashed rgba(148, 163, 184, 0.5);
+}
+
+/* ── Lane positions: signals sit at the road entry points ── */
+
+/* Lane 2 — Left entry of horizontal road */
+#lane-2 {
+    position: absolute;
+    top: 35%;                /* vertically centered on the horizontal road */
+    left: 12px;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+/* Lane 3 — Right entry of horizontal road */
+#lane-3 {
+    position: absolute;
+    top: 35%;
+    right: 12px;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+/* Lane 1 — Bottom entry of vertical road (emergency lane) */
+#lane-1 {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.lane { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 6px;
+}
+.lane h2 { 
+    font-size: 0.85rem; 
+    text-align: center; 
+    color: #cbd5e1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 4px; 
+    z-index: 15;
+    white-space: nowrap;
+}
+.lane .tag { 
+    display: inline-block; 
+    font-size: 0.6rem; 
+    background: var(--accent-blue); 
+    color: white; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-weight: 700;
+}
+
+.operational-tag {
+    background: var(--safe-green) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    border: 1px solid white;
+}
+
+/* ── Traffic Lights ── */
+.traffic-light {
+    background: #111;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: auto;
+    margin: 0 auto;
+    z-index: 10;
+}
+
+.bulb {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    transition: all 0.3s ease;
+}
+
+
+.bulb.red.active { background: var(--danger-red); box-shadow: 0 0 20px var(--danger-red); }
+.bulb.yellow.active { background: var(--warn-yellow); box-shadow: 0 0 20px var(--warn-yellow); }
+.bulb.green.active { background: var(--safe-green); box-shadow: 0 0 20px var(--safe-green); }
+
+/* Lane labels positioned for readability */
+#lane-2 h2 { margin-top: 6px; }
+#lane-3 h2 { margin-top: 6px; }
+#lane-1 h2 { margin-top: 4px; }
+
+/* ═══════════════════════════════════════════════════
+   Sensors
+   ═══════════════════════════════════════════════════ */
+.sensor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.sensor-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.sensor-card h3 { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+.sensor-card .status { font-weight: 700; font-size: 1.2rem; }
+
+.sensor-card.active { border-color: var(--danger-red); background: rgba(239, 68, 68, 0.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);}
+.sensor-card.active .status { color: var(--danger-red); }
+
+
+
+/* RF hardware status indicator */
+.rf-hw-status {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    opacity: 0.8;
+}
+.rf-hw-status.online { color: var(--safe-green); }
+.rf-hw-status.offline { color: var(--warn-yellow); }
+
+/* ═══════════════════════════════════════════════════
+   Logs
+   ═══════════════════════════════════════════════════ */
+.logs-container {
+    height: 150px;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+.log-entry { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.log-entry.override { color: var(--danger-red); font-weight: bold; }

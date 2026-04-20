@@ -1,0 +1,8 @@
+RPi.GPIO==0.7.1
+spidev==3.6
+opencv-python==4.9.0.80
+ultralytics==8.1.0
+pyrf24==0.6.0
+numpy<2.0.0
+Flask==3.0.2
+Flask-SocketIO==5.3.6

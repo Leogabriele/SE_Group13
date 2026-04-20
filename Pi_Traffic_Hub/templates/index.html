@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHADOW-VIKING | Traffic Control System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=7">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>SURVEILLANCE <span>DASHBOARD</span></h1>
+            <div id="connection-status" class="status-badge connecting">Connecting to Hub...</div>
+        </header>
+
+        <div class="main-grid">
+            <!-- CV Camera Feed Panel -->
+            <section class="panel video-panel">
+                <div class="panel-header">LIVE INTELLIGENCE (CAMERA 1)</div>
+                <div class="video-container">
+                    <img id="videoStream" src="/video_feed" alt="Camera Feed Loading...">
+                </div>
+            </section>
+
+            <!-- Traffic Flow Digital Twin -->
+            <section class="panel traffic-panel">
+                <div class="panel-header">INTERSECTION DIGITAL TWIN</div>
+                <div class="t-junction-map">
+                    <!-- Road surface elements -->
+                    <div class="road-horizontal"></div>
+                    <div class="road-vertical"></div>
+
+                    <!-- Lane 2: Left entry on horizontal road -->
+                    <div class="lane" id="lane-2">
+                        <div class="traffic-light">
+                            <div class="bulb red"></div>
+                            <div class="bulb yellow"></div>
+                            <div class="bulb green"></div>
+                        </div>
+                        <h2>Signal 2</h2>
+                    </div>
+                    
+                    <!-- Lane 3: Right entry on horizontal road -->
+                    <div class="lane" id="lane-3">
+                        <div class="traffic-light">
+                            <div class="bulb red"></div>
+                            <div class="bulb yellow"></div>
+                            <div class="bulb green"></div>
+                        </div>
+                        <h2>Signal 3</h2>
+                    </div>
+
+                    <!-- Lane 1: Bottom entry on vertical road (Emergency) -->
+                    <div class="lane" id="lane-1">
+                        <div class="traffic-light">
+                            <div class="bulb red"></div>
+                            <div class="bulb yellow"></div>
+                            <div class="bulb green"></div>
+                        </div>
+                        <h2>Signal 1 <span class="tag operational-tag">Camera 1</span></h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dual Sensor State -->
+            <section class="panel sensors-panel">
+                <div class="panel-header">DETECTION STATUS</div>
+                <div class="sensor-grid">
+                    <div class="sensor-card" id="sensor-cv">
+                        <h3>VISION AI (YOLO)</h3>
+                        <p class="status">AWAITING FRAMES...</p>
+                    </div>
+                    <div class="sensor-card" id="sensor-rf">
+                        <h3>RF SIREN RECEIVER</h3>
+                        <p class="status">NO SIGNAL</p>
+                        <p class="rf-hw-status" id="rf-hw-status">Checking hardware...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Event Logs -->
+            <section class="panel logs-panel">
+                <div class="panel-header">SYSTEM LOGS</div>
+                <div class="logs-container" id="logs-box">
+                    <!-- Logs inserted dynamically -->
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='main.js') }}?v=7"></script>
+</body>
+</html>
